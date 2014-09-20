@@ -7,24 +7,24 @@ publically available tools are Windows only. It's also why I share this, in case
 
 
 ###Prerequisites
-*Python 3
-*This makes uf of my BFHRCONPython repository. I have included this however in the "bfhrcon" directory.
-*Add your server details in confg/config.xml
+* Python 3
+* This makes uf of my BFHRCONPython repository. I have included this however in the "bfhrcon" directory.
+* Add your server details in confg/config.xml
 
 ###How to Run?
 
 There are 2 versions of the program:
-GUI - run MainWindow.py
-CLI - run cli.py (currently not included - will be soon)
+* GUI - run MainWindow.py
+* CLI - run cli.py (currently not included - will be soon)
 
 ###Staff.txt
 Just a txt file containing staff. Each line must contain a player ID and a permission level. Like follows:
 12084824,1337
 
 Different staff levels are,
-Owner: 1337
-Admin: 2
-Moderator: 1
+* Owner: 1337
+* Admin: 2
+* Moderator: 1
 
 
 
