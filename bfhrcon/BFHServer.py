@@ -203,7 +203,7 @@ class BFHServer(ServerBase):
         :param msg: string
         :return: string (response from server)
         """
-        return self.query('exec game.sayAll ": {}"'.format(msg))
+        return self.query('exec game.sayAll " {}"'.format(msg))
 
     def setVipStatus(self, player, playerID, status):
         """

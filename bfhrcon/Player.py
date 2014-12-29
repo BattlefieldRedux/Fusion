@@ -1,3 +1,5 @@
+import time
+
 __author__ = 'Scott Davey'
 
 """
@@ -39,7 +41,11 @@ class Player:
     admin: bool, false by default
     owner: bool, false by default
     """
+
     def __init__(self, _id, name, kit, connected, alive, kills, deaths, suicides, team, level, score, ping, ip, playerid, vip, heroid, mod=False, admin=False, owner=False):
+        self.update(_id, name, kit, connected, alive, kills, deaths, suicides, team, level, score, ping, ip, playerid, vip, heroid, mod, admin, owner, True)
+
+    def update(self, _id, name, kit, connected, alive, kills, deaths, suicides, team, level, score, ping, ip, playerid, vip, heroid, mod=False, admin=False, owner=False, joined=False):
         self.__id = _id
         if alive == "1": self.__alive = True
         else: self.__alive = False
@@ -71,6 +77,12 @@ class Player:
         else:
             self.__vip = False
         self.__heroid = heroid
+        if joined:
+            self.timeJoined = time.time()
+            self.lastBeat = self.timeJoined
+        else:
+            self.lastBeat = time.time()
+        self.updated = True
 
     def getId(self):
         return self.__id
@@ -104,6 +116,26 @@ class Player:
         return self.__vip
     def getHeroId(self):
         return self.__heroid
+
+    def updateFromPlayer(self, p):
+        self.__id = p.getId()
+        self.__alive = p.isAlive()
+        self.__name = p.getName()
+        self.__kit = p.getKit()
+        self.__connected = p.isConnected()
+        self.__kills = p.getKills()
+        self.__deaths = p.getDeaths()
+        self.__suicides = p.getSuicides()
+        self.__team = p.getTeam()
+        self.__level = p.getLevel()
+        self.__score = p.getScore()
+        self.__ping = p.getPing()
+        self.__ip = p.getIp()
+        self.__playerid = p.getPlayerId()
+        self.__vip = p.isVip()
+        self.__heroid = p.getHeroId()
+        self.lastBeat = time.time()
+        self.updated = True
 
 
 

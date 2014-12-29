@@ -21,17 +21,27 @@ class AdminTool:
         ##config
         self.bannerUrl = ""
         self.maxLevelDiff = 6
+        self.balanceGameEnabled = False
 
         self.afkLog = {}
         self.afkChecked = False #boolean to check only once each round
         self.lastCheck = 0
         self.getStaff()
-        self.loadConfig()
+        #self.loadConfig()
 
 
 
     def fetchPlayers(self):
-        self.players = self.server.getPlayers()
+        self.resetPlayerUpdates()
+        new = self.server.getPlayers()
+        for p in new:
+            player = self.getPlayerWithPlayerId(p.getPlayerId())
+            if player is not None:
+                player.updateFromPlayer(p)
+            else:
+                self.players.append(p)
+        quitPlayers = self.removeQuitPlayers()
+        #TODO log players that have quit
 
     def calcAverage(self):
         levels = []
@@ -73,16 +83,12 @@ class AdminTool:
     def runTasks(self):
         #self.checkAFKPlayers()
         self.calcAverage()
-        self.balanceGame()
+        if self.balanceGameEnabled:
+            self.balanceGame()
         while not self.q.empty():
             cmd = self.q.get()
             cmd()
 
-    def loadConfig(self):
-        tree = etree.parse('conf/config.xml')
-        root = tree.getroot()
-        self.maxLevelDiff = int(root.find('maxLevelDiff').text)
-        self.bannerUrl = root.find('banner').text
 
     def isMod(self, player):
         return player.getPlayerId() in self.mods or player.getPlayerId() in self.admins or player.getPlayerId() in self.owners
@@ -144,6 +150,14 @@ class AdminTool:
             count += 1
         return None
 
+    def getPlayerWithPlayerId(self, search):
+        count = 0
+        while count < len(self.players):
+            if search == self.players[count].getPlayerId():
+                return self.players[count]
+            count += 1
+        return None
+
     def isPregame(self):
         return self.server.roySize < 2 or self.server.natSize < 2
 
@@ -158,6 +172,16 @@ class AdminTool:
                 return self.players[count]
             count += 1
         return None
+
+    def resetPlayerUpdates(self):
+        for p in self.players:
+            p.updated = False
+
+    def removeQuitPlayers(self):
+        quitPlayers = [p for p in self.players if not p.updated]
+        self.players = [p for p in self.players if p.updated]
+        return quitPlayers
+
 
     def getStaff(self):
         try:
@@ -219,7 +243,7 @@ class AdminTool:
                 self.server.kickPlayer(p.getId(), arg)
 
         elif command == "s" and self.isMod(player):
-            self.server.adminSay("{} [{}]".format(msg[3:], player.getName()))
+            self.server.adminSay("{} [{}]".format(args, player.getName()))
 
         elif command == "rm" and self.isMod(player):
             self.server.restartMap()
@@ -232,6 +256,9 @@ class AdminTool:
         elif command == "jump" and self.isMod(player):
             mapName = self.getRealNameFromShort(args[0])
             if mapName is not None: self.server.jumpToMap()
+
+        elif command == "deaths":
+            self.server.privateToPlayer(player.getId(), ": DEATHS - {}".format(player.getDeaths()))
 
         elif command == "p":
             to = self.searchByName(args[0])

@@ -8,7 +8,7 @@ from AdminTool import *
 from ChatView import *
 from InfoView import *
 from bfhrcon.BFHServer import *
-import xml.etree.ElementTree as etree
+import json
 
 class mainWindow(QMainWindow):
     def __init__(self):
@@ -19,24 +19,18 @@ class mainWindow(QMainWindow):
         self.getDataThread.start()
 
     def connectServer(self):
-        ip = ""
-        port = 12345
-        passw = ""
-        try:
-            tree = etree.parse('conf/config.xml')
-            root = tree.getroot()
-            ip = root.find('ip').text
-            port = int(root.find('port').text)
-            passw = root.find('pass').text
-        except IOError:
-            print("ERROR: File could not be opened/read.")
-            sys.exit(1)
+        ip, port, passw = self.loadConnectionData('conf/config.json')
         server = BFHServer(ip,port,passw)
         if len(ip) < 7 or not server.connect():
             print("Problem with server connection or server details provided")
             sys.exit(1)
         self.sc = AdminTool(server)
         self.getDataThread = UpdateDataThread(self.sc)
+
+    def loadConnectionData(self, file):
+        with open(file) as data_file:
+            data = json.load(data_file)
+        return data["servers"][0]["ip"], data["servers"][0]["port"], data["servers"][0]["pass"]
 
 
     def playerLayout(self):
