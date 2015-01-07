@@ -10,7 +10,7 @@ class PlayerView(QTableWidget):
         super(PlayerView, self).__init__(parent)
         self.parent = parent
         self.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
-        self.columnNames = ["ID", "Name", "Class", "Kills", "Deaths", "Level", "Score", "Ping", "Player ID", "VIP", "Hero ID", "Team"]
+        self.columnNames = ["ID", "Name", "Class", "Kills", "Deaths", "Level", "Score", "Ping", "Player ID", "VIP", "Hero ID", "Team", "Time in Server"]
         self.setRowCount(16)
         self.setColumnCount(len(self.columnNames))
         #create table
@@ -44,7 +44,7 @@ class PlayerView(QTableWidget):
         if len(playerArray) > 0:
             for player in playerArray:
                 tmpList = [player.getId(), player.getName(), player.getKit(), player.getKills(), player.getDeaths(), player.getLevel(), player.getScore(),
-                           player.getPing(), player.getPlayerId(), player.isVip(), player.getHeroId(), player.getTeam()]
+                           player.getPing(), player.getPlayerId(), player.isVip(), player.getHeroId(), player.getTeam(), round(player.timePlayed()/60)]
                 playerList.append(tmpList)
             for row in range(0,len(playerList)):
                 for column in range(0, len(self.columnNames)):

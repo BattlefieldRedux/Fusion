@@ -25,7 +25,7 @@ class UpdateDataThread(QThread):
                 self.emit(SIGNAL('update(QString)'), "done")
                 time.sleep(2)
             except: #retry a connection
-                self.server.reconnect()
+                self.tool.reconnect()
 
     def stop(self):
         self.stopped = True

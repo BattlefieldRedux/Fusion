@@ -39,8 +39,11 @@ class AdminTool:
             if player is not None:
                 player.updateFromPlayer(p)
             else:
+                print(p.getName() + " has joined the server.")
                 self.players.append(p)
         quitPlayers = self.removeQuitPlayers()
+        for p in quitPlayers:
+            print(p.getName() + " has quit the server.")
         #TODO log players that have quit
 
     def calcAverage(self):
@@ -77,7 +80,7 @@ class AdminTool:
         try:
             while not self.server.connect():
                 time.sleep(15)
-        except:
+        except Exception:
             pass
 
     def runTasks(self):
@@ -259,6 +262,9 @@ class AdminTool:
 
         elif command == "deaths":
             self.server.privateToPlayer(player.getId(), ": DEATHS - {}".format(player.getDeaths()))
+
+        elif command == "playtime":
+            self.server.privateToPlayer(player.getId(), ": PLAY TIME - {} minutes".format(round(player.timePlayed()/60)))
 
         elif command == "p":
             to = self.searchByName(args[0])

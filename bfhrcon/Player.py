@@ -79,9 +79,6 @@ class Player:
         self.__heroid = heroid
         if joined:
             self.timeJoined = time.time()
-            self.lastBeat = self.timeJoined
-        else:
-            self.lastBeat = time.time()
         self.updated = True
 
     def getId(self):
@@ -117,6 +114,9 @@ class Player:
     def getHeroId(self):
         return self.__heroid
 
+    def timePlayed(self):
+        return time.time()-self.timeJoined
+
     def updateFromPlayer(self, p):
         self.__id = p.getId()
         self.__alive = p.isAlive()
@@ -134,7 +134,6 @@ class Player:
         self.__playerid = p.getPlayerId()
         self.__vip = p.isVip()
         self.__heroid = p.getHeroId()
-        self.lastBeat = time.time()
         self.updated = True
 
 
