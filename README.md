@@ -26,6 +26,7 @@ Different staff levels are,
 * Admin: 2
 * Moderator: 1
 
+Screenshots
+![main view of admin tool](https://www.dropbox.com/s/i5nlk8irpxlug8i/Screenshot%202015-06-08%2015.55.36.png?raw=1)
 
-
-
+![right click menu](https://www.dropbox.com/s/afiiuo4jbm1zkby/Screenshot%202015-06-08%2015.56.15.png?raw=1)
